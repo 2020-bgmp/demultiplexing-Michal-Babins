@@ -1,0 +1,185 @@
+The problem needs put each read output file into its own file separately and the 
+files should be indentified by index and whether each read is the forward
+or reverse read by illuminas terms. The files need to get all the data 
+associated with each index and read. Additional output information is to be
+output for correct matches, read pairs with index hopping, and reads with unkown
+index. This will output 48 files. 2 files will be incorrectly paired for 
+forward and reverse and 2 for unkown paired indices. 
+
+Of the 48 files, 24 will be the actual index, the other will be the reverse compliment, 
+but it would be valuable to add a reverse tag to be able to identify those easier. 
+
+Valuable output would be matching barcodes that has the ability to be identified 
+as original or reverse. If the barcodes are properly matched, then have corresponding 
+output that addresses so. Necessary output also includes unmatched pairs that are placed
+in properly named output files. And repeat the same for inex hopped. One additional step for
+each file type is split by Read 1 and Read 2 individually. 
+
+Unknown Index Output:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 1:N:0:1
+GNCTGGCATTCCCAGAGACATCAGTACCCAGTTGGTTCAGACAGTTCCTCTATTGGTTGACAAGGTCTTCATTTCTAGTGATATCAACACGGTGTCTACAA
++
+A#A-<FJJJ<JJJJJJJJJJJJJJJJJFJJJJFFJJFJJJAJJJJ-AJJJJJJJFFJJJJJJFFA-7<AJJJFFAJJJJJF<F--JJJJJJF-A-F7JJJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 2:N:0:1
+NCTTCGAC
++
+#AA<FJJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 3:N:0:1
+NTCGAAGA
++
+#AAAAJJF
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 4:N:0:1
+NTTTTGATTTACCTTTCAGCCAATGAGAAGGCCGTTCATGCAGACTTTTTTAATGATTTTGAAGACCTTTTTGATGATGATGATGTCCAGTGAGGCCTCCC
++
+#AAFAFJJ-----F---7-<FA-F<AFFA-JJJ77<FJFJFJJJJJJJJJJAFJFFAJJJJJJJJFJF7-AFFJJ7F7JFJJFJ7FFF--A<A7<-A-7--
+
+Paired Match Output:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 1:N:0:1
+GNCTGGCATTCCCAGAGACATCAGTACCCAGTTGGTTCAGACAGTTCCTCTATTGGTTGACAAGGTCTTCATTTCTAGTGATATCAACACGGTGTCTACAA
++
+A#A-<FJJJ<JJJJJJJJJJJJJJJJJFJJJJFFJJFJJJAJJJJ-AJJJJJJJFFJJJJJJFFA-7<AJJJFFAJJJJJF<F--JJJJJJF-A-F7JJJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 2:N:0:1
+ATTGCTAC
++
+#AA<FJJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 3:N:0:1
+GTAGCAAT
++
+#AAAAJJF
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 4:N:0:1
+NTTTTGATTTACCTTTCAGCCAATGAGAAGGCCGTTCATGCAGACTTTTTTAATGATTTTGAAGACCTTTTTGATGATGATGATGTCCAGTGAGGCCTCCC
++
+#AAFAFJJ-----F---7-<FA-F<AFFA-JJJ77<FJFJFJJJJJJJJJJAFJFFAJJJJJJJJFJF7-AFFJJ7F7JFJJFJ7FFF--A<A7<-A-7--
+
+Index Hopping:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 1:N:0:1
+GNCTGGCATTCCCAGAGACATCAGTACCCAGTTGGTTCAGACAGTTCCTCTATTGGTTGACAAGGTCTTCATTTCTAGTGATATCAACACGGTGTCTACAA
++
+A#A-<FJJJ<JJJJJJJJJJJJJJJJJFJJJJFFJJFJJJAJJJJ-AJJJJJJJFFJJJJJJFFA-7<AJJJFFAJJJJJF<F--JJJJJJF-A-F7JJJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 2:N:0:1
+TATGGCAC
++
+#AA<FJJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 3:N:0:1
+GCAAGATC
++
+#AAAAJJ
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 4:N:0:1
+NTTTTGATTTACCTTTCAGCCAATGAGAAGGCCGTTCATGCAGACTTTTTTAATGATTTTGAAGACCTTTTTGATGATGATGATGTCCAGTGAGGCCTCCC
++
+#AAFAFJJ-----F---7-<FA-F<AFFA-JJJ77<FJFJFJJJJJJJJJJAFJFFAJJJJJJJJFJF7-AFFJJ7F7JFJJFJ7FFF--A<A7<-A-7--
+
+
+Psuedo Code:
+First part of the code you will want go into the files and locate the header and the sequence and
+the index through parsing. Next you will want the R2 and R3 indexes to be placed after the header
+for match identification. However, each read will be in its own file. So R1 will have a separate file
+and R2 will have its own file as well, with header and index placement and the correct sequence. 
+The files will then be output based on index type. If indices are paired, incorrectly paired,
+or index hopping occured. 
+
+Get itertools to be able to look at multiple files at once
+
+def rev_comp(index3):
+    Intake Read 3 and identify the Barcdode
+    Starting in the first positon
+    In Barcode of R3:
+    If nucleotide A, change to T
+    If nucleotide is T, change to A
+    If nucleotide is C, change to G
+    If nucleotide is G, change to C
+    Reverse_dir = Take the position of the Barcode and reverse it so last position is now Starting
+    ([::-1])
+
+    return Reverse_dir
+
+
+def add_indices(R2,R3):
+    Start counter at zero for read 1
+    Start counter at zero for read 2
+    Start counter at zero for read 3
+    Start counter at zero for read 4
+    Open all 4 files to have complete information
+    Start all counters 
+    Use function to reverse
+        For line in all files:
+        Take R2 at the Nth postion for index and add after Header of R1
+        Take R2 at the Nth positon for index and add after Header of R4
+        Take R3 at the Nth positon for index and add after Header of R1
+        Take R3 at the Nth position for index and add after Header of R4
+            If the read is R1:
+                Put into it's own file with header indices and sequence
+            If the read is R4:
+                Then put into it's own file with header indeces and sequence
+
+
+def convert_phred:
+'''convert the phred score of each of the indices'''''
+    for line of indices that containes phred score:
+        take the phred and convert each character to numerical value
+
+
+set list for R1
+set list for R2
+set list for R3
+set list for R4
+
+'''This part of the code will separate each condition into a file'''
+Go into R2, and R3
+Get the reverse compliment of R3 
+Set counters
+While going through each list, set conditions for: 
+    If R2 is not equal to R3, but matches index of another file:
+        Then add to index hopped file 
+    If R2 or R3 or Both contain variable N:
+        Then add to unkown low quality for R1 if R1, or R4 if R4
+    If Index 1 and 2 are paired and the quality scores of each base are >=20:
+    ''' The cut off of 20 means 99% chance of being accurate, and 1% chance of error. Being a 8 long index
+        then expectations should be higher and identification should be quality as well'''
+        Then add to good file
+    Elif:
+        Add to low quality file
+''' This code should should extract the correct information for splitting up output files.
+    Applications of this code should create paired files for R1 and R4 for good quality 
+    Qscores, if the qscore is bad put them in a file that recognizes thier poor quality. Unmatched
+    files will go into thier own folder for R1 and R4. If they are hopped for one or both, put to index
+    hopped file. '''
+
+''' Finally a Code to count the number of Unpaired(N) and the number of indexed hopped reads'''
+Set counter
+For index line in files:
+    If an n is present
+        add up the each instance of unpaired
+    If the indices don't match:
+        add up each instance of hopped 
+        '''This will also be structured so if indices A:B
+            and B:A will be counted as 2 not as 1'''
+
+
+
+
+
+
+Quality paired R1:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 1:N:0:1 ATTGCTAC-ATTGCTAC
+GNCTGGCATTCCCAGAGACATCAGTACCCAGTTGGTTCAGACAGTTCCTCTATTGGTTGACAAGGTCTTCATTTCTAGTGATATCAACACGGTGTCTACAA
+
+Quality paired R4:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 4:N:0:1 ATTGCTAC-ATTGCTAC
+NTTTTGATTTACCTTTCAGCCAATGAGAAGGCCGTTCATGCAGACTTTTTTAATGATTTTGAAGACCTTTTTGATGATGATGATGTCCAGTGAGGCCTCCC
+
+Unmatched R1:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 1:N:0:1 NTTGCTAC-ATTGCTAN
+GNCTGGCATTCCCAGAGACATCAGTACCCAGTTGGTTCAGACAGTTCCTCTATTGGTTGACAAGGTCTTCATTTCTAGTGATATCAACACGGTGTCTACAA
+
+Unmatched R4:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 4:N:0:1 NTTGCTAC-ATTGCTAN
+NTTTTGATTTACCTTTCAGCCAATGAGAAGGCCGTTCATGCAGACTTTTTTAATGATTTTGAAGACCTTTTTGATGATGATGATGTCCAGTGAGGCCTCCC
+
+Indexed Hopped R1:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 1:N:0:1 TATGGCAC-GATCTTGC 
+GNCTGGCATTCCCAGAGACATCAGTACCCAGTTGGTTCAGACAGTTCCTCTATTGGTTGACAAGGTCTTCATTTCTAGTGATATCAACACGGTGTCTACAA
+
+Index Hopped R4:
+@K00337:83:HJKJNBBXX:8:1101:1265:1191 4:N:0:1 TATGGCAC-GATCTTGC
+NTTTTGATTTACCTTTCAGCCAATGAGAAGGCCGTTCATGCAGACTTTTTTAATGATTTTGAAGACCTTTTTGATGATGATGATGTCCAGTGAGGCCTCCC
