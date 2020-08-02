@@ -12,6 +12,9 @@
 
 2. Per-base NT distribution
     1. Use markdown to insert your 4 histograms here.
+    https://user-images.githubusercontent.com/65972843/89133968-95870d80-d4d5-11ea-852c-a814d6a0f999.png
+    https://user-images.githubusercontent.com/65972843/89133990-d4b55e80-d4d5-11ea-8c0d-81f314ed7e96.png
+    
     2. ```Your answer here```
     3. ```Your answer here```
     
