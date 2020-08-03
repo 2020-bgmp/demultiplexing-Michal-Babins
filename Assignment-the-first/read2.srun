@@ -1,0 +1,55 @@
+#!/usr/bin/env python
+
+
+file = "/projects/bgmp/shared/2017_sequencing/1294_S1_L008_R2_001.fastq.gz"    
+
+import codecs
+import gzip
+import matplotlib.pyplot as plt
+import numpy as py
+def init_list(value=0.0):
+    array = [] #set empty array
+    for x in range(8):
+        array.append(value) #fill array with value float for 0-101
+    return(array)
+   
+
+# mean_scores = []
+# mean_scores = init_list(mean_scores)
+
+def convert_phred(letter):
+    return ord(letter) - 33
+
+
+def populate_list(file):
+    LN = 0
+    mean_scores = init_list() #initializing mean scores list to take in array
+    with gzip.open(file, "tr") as fh:
+        for line in fh:
+            LN+=1
+            line = line.strip("\n") #stripping line of space
+            if LN%4 == 0:
+                line1 = line    #starting line 2 and including every 4 lines
+                for counter, char in enumerate(line1):
+                    mean_scores[counter] += convert_phred(char) #tracking each char and converting it to phred score while summing
+    return mean_scores, LN
+
+
+mean_scores, NR = populate_list(file) #extract mean, NR
+total = len(mean_scores)
+qual_scores = []
+for count in mean_scores: #iterate thorghmean
+    qual_scores.append(count/(NR/4)) #quality scores divided by 4000000
+
+x = range(len(mean_scores))
+
+y = qual_scores
+
+plt.figure(figsize=(12,8))
+plt.bar(x,y)
+plt.title('Mean Score per Base Call')
+plt.ylabel('Mean Score')
+plt.xlabel('Position')
+plt.show()
+
+plt.savefig("./{}histogramR2.png")
