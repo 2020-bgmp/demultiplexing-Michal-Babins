@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --partition=bgmp                   ### Partition
+#SBATCH --job-name=mbabins5demultiplex         ### Job Name
+#SBATCH --output=mbabins5demultiplex.txt    ###File in which to store job output
+#SBATCH --error=mbabins5demultiplex.er    ### File to store error in
+#SBATCH --nodes=1                       ### Needed to run job
+#SBATCH --ntasks-per-node=1                   ### Run on a single CPU
+#SBATCH --cpus-per-task=7             ### How many cpus needed for job
+#SBATCH --time=2-00:00:00               ### Wall Clock Time limit hrs:min:sec
+#SBATCH --account=bgmp                  ### Account used for job submission
+
+conda activate bgmp_py37
+/usr/bin/time -v \
+python demultiplex.py \
+-file1 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R1_001.fastq.gz \
+-file2 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R2_001.fastq.gz \
+-file3 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R3_001.fastq.gz \
+-file4 /projects/bgmp/shared/2017_sequencing/1294_S1_L008_R4_001.fastq.gz \
+-index /projects/bgmp/shared/2017_sequencing/indexes.txt 
