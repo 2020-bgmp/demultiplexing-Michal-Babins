@@ -15,3 +15,10 @@ Final work will be submitted on [GitHub](.). Make sure your folder is well organ
 - Percentage of reads from each sample
 - Overall amount of index swapping
 - Any figures/any other relevant data your code output
+
+| File Type | Numerical Value | Percentage Value |
+|---|---|---|
+| Paired Files | 363246735 | 88.91% |
+| Error Files | 10954617 | 2.68% |
+| Hopped Files | 34340005 | 8.41 % |
+| Total | 408541357 | 100% |
