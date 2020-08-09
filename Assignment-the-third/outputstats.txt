@@ -1,0 +1,5 @@
+10954617 Total output to the error file
+34340005 Total hopped files
+
+363246735 Total paired reads
+87.5306182724533%  Percent mapped reads
